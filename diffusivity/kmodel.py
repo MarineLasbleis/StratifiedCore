@@ -1,27 +1,33 @@
 #!/usr/bin/env python
-## Time-stamp: "2015-12-02 17:00:02 marine"
+## Time-stamp: "2015-12-03 17:03:20 marine"
 
 import numpy as np
 from scipy.integrate import quad
 import matplotlib.pyplot as plt
 
 
-Iron = {'name' : 'Fe', 'f1' : 5.26e-9, 'f2' : 1.24, 'f3' : -3.21}
+IRON = {'name' : 'Fe', 'f1' : 5.26e-9, 'f2' : 1.24, 'f3' : -3.21}
 
 def rho(f,f1,f2,f3) :
+    """ equation 9 Gomi 2013 """
     return f1*(f2 - f)**f3
     
-def integrand_eq1(z):
-    return z**5/(np.exp(z)-1)/(1-np.exp(-z))
 
-def resistivity(f, T, El, theta0=417., gamma=1.52, Ir=Iron) :
+
+def resistivity(f, T, El, theta0=417., gamma=1.52, Ir=IRON) :
     """ Ideal resistivity from the Bloch GRuneisen formula as in Gomi 2013 (equation (1))
+    
     f: V/V0
     T : absolute temperature
     El: element (dictionnary with z valence charge and x atomic fraction)
     theta0
     gamma
+    
     """
+
+    def integrand_eq1(z):
+        """ integrande for function resistivity """
+        return z**5/(np.exp(z)-1)/(1-np.exp(-z))
 
     theta = theta0*np.exp(-gamma *np.log(f))  #Debye temperature
     tfac = (T/theta)**5 *quad(integrand_eq1, 0, theta/T)[0]
@@ -50,13 +56,13 @@ if __name__ == '__main__':
     ## Light elements :
     # name, z: valence charge, x: atomic fraction
     # f1,f2,f3 are fitting parameters
-    Iron = {'name' : 'Fe', 'f1' : 5.26e-9, 'f2' : 1.24, 'f3' : -3.21}
-    Silicium = {'name' : 'Si', 'z' : 1, 'x' : 22.5, 'f1' : 3.77e-8, 'f2' : 1.48, 'f3' : -3.10}
-    Carbon = {'name' : 'C', 'z' : 1, 'x' : 30}
-    Oxygen = {'name' : 'O', 'z' : 0.5, 'x' : 23.2}
-    Sulfur = {'name' : 'S', 'z' : 0.5, 'x' : 19.4}
+    IRON = {'name' : 'Fe', 'f1' : 5.26e-9, 'f2' : 1.24, 'f3' : -3.21}
+    SILICIUM = {'name' : 'Si', 'z' : 1, 'x' : 22.5, 'f1' : 3.77e-8, 'f2' : 1.48, 'f3' : -3.10}
+    CARBON = {'name' : 'C', 'z' : 1, 'x' : 30}
+    OXYGEN = {'name' : 'O', 'z' : 0.5, 'x' : 23.2}
+    SULFUR = {'name' : 'S', 'z' : 0.5, 'x' : 19.4}
     
-    ParametersMurnaghan = {'T0': 1812., 'rho0': 7010., 'K': 130.*1e9, 'KPrim':4.,
+    MURNAGHAN = {'T0': 1812., 'rho0': 7010., 'K': 130.*1e9, 'KPrim':4.,
                         'alphaPrim': 130.*np.log(2.)/(360.-135.) ,
                         'alpha': 1.e-5/np.exp(-0.400485 *135./130.),   #1.e-5*np.exp(130.*np.log(2.)/(360.-135.)*135./130),#   1.e-5/np.exp( np.log(2)/(360.-135.)*135.),
                         'Cp': 800., 'cond': 140.}
@@ -69,8 +75,8 @@ if __name__ == '__main__':
 
     ## Adiabatic profile
     for p in P:
-        #print Tadiabatic(p, T0, P0, ParametersMurnaghan)
-        T = np.append(T, eos.Tadiabatic(p, T0, P0, ParametersMurnaghan))
+        #print Tadiabatic(p, T0, P0, MURNAGHAN)
+        T = np.append(T, eos.Tadiabatic(p, T0, P0, MURNAGHAN))
 
         
     fig1 = plt.figure()
@@ -83,8 +89,8 @@ if __name__ == '__main__':
     ## Associated k profile
     conductivity = []
     for i in range(0,N):        
-        f = eos.fval(P[i],T[i], ParametersMurnaghan)
-        res = resistivity(f, T[i], El=Silicium, theta0=417, gamma=1.52, Ir=Iron)
+        f = eos.fval(P[i],T[i], MURNAGHAN)
+        res = resistivity(f, T[i], El=SILICIUM, theta0=417, gamma=1.52, Ir=IRON)
         conductivity = np.append(conductivity, k(res, T[i], f, L=2.44e-8))
 
     fig2 = plt.figure()

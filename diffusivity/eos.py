@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-## Time-stamp: "2015-12-02 13:32:33 marine"
+## Time-stamp: "2015-12-03 16:57:05 marine"
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -10,8 +10,10 @@ from scipy.integrate import quad
 
 def Volume(P, T, param):
     """ Calculation of the typical volume
+    
     P : pressure, T : temperature
     param : parameters for the Burch Murnaghan EOS
+    
      """
     rhodP = param['rho0'] * (param['KPrim'] * P/param['K'] + 1.)**(1./param['KPrim'])
     rhodT = np.exp( - (param['alpha'] * np.exp(-param['alphaPrim'] *P / param['K']))
@@ -49,7 +51,7 @@ def Tadiabatic(P, t0, p0, param):
 if __name__ == '__main__':
 
 
-    ParametersMurnaghan = {'T0': 1812., 'rho0': 7010., 'K': 130.*1e9, 'KPrim':4.,
+    MURNAGHAN = {'T0': 1812., 'rho0': 7010., 'K': 130.*1e9, 'KPrim':4.,
                         'alphaPrim': 130.*np.log(2.)/(360.-135.) ,
                         'alpha': 1.e-5/np.exp(-0.400485 *135./130.),   #1.e-5*np.exp(130.*np.log(2.)/(360.-135.)*135./130),#   1.e-5/np.exp( np.log(2)/(360.-135.)*135.),
                         'Cp': 800., 'cond': 140.}
@@ -63,8 +65,8 @@ if __name__ == '__main__':
     T0 = 3750.
     
     for p in P:
-        #print Tadiabatic(p, T0, P0, ParametersMurnaghan)
-        T = np.append(T, Tadiabatic(p, T0, P0, ParametersMurnaghan))
+        #print Tadiabatic(p, T0, P0, MURNAGHAN)
+        T = np.append(T, Tadiabatic(p, T0, P0, MURNAGHAN))
 
 
     fig = plt.figure(1)
