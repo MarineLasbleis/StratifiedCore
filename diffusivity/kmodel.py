@@ -1,19 +1,12 @@
 #!/usr/bin/env python
-## Time-stamp: "2015-12-02 13:32:42 marine"
+## Time-stamp: "2015-12-02 17:00:02 marine"
 
 import numpy as np
 from scipy.integrate import quad
 import matplotlib.pyplot as plt
 
-## Light elements :
-# name, z: valence charge, x: atomic fraction
-# f1,f2,f3 are fitting parameters
-Iron = {'name' : 'Fe', 'f1' : 5.26e-9, 'f2' : 1.24, 'f3' : -3.21}
-Silicium = {'name' : 'Si', 'z' : 1, 'x' : 22.5, 'f1' : 3.77e-8, 'f2' : 1.48, 'f3' : -3.10}
-Carbon = {'name' : 'C', 'z' : 1, 'x' : 30}
-Oxygen = {'name' : 'O', 'z' : 0.5, 'x' : 23.2}
-Sulfur = {'name' : 'S', 'z' : 0.5, 'x' : 19.4}
 
+Iron = {'name' : 'Fe', 'f1' : 5.26e-9, 'f2' : 1.24, 'f3' : -3.21}
 
 def rho(f,f1,f2,f3) :
     return f1*(f2 - f)**f3
@@ -54,6 +47,15 @@ if __name__ == '__main__':
 
     import eos
 
+    ## Light elements :
+    # name, z: valence charge, x: atomic fraction
+    # f1,f2,f3 are fitting parameters
+    Iron = {'name' : 'Fe', 'f1' : 5.26e-9, 'f2' : 1.24, 'f3' : -3.21}
+    Silicium = {'name' : 'Si', 'z' : 1, 'x' : 22.5, 'f1' : 3.77e-8, 'f2' : 1.48, 'f3' : -3.10}
+    Carbon = {'name' : 'C', 'z' : 1, 'x' : 30}
+    Oxygen = {'name' : 'O', 'z' : 0.5, 'x' : 23.2}
+    Sulfur = {'name' : 'S', 'z' : 0.5, 'x' : 19.4}
+    
     ParametersMurnaghan = {'T0': 1812., 'rho0': 7010., 'K': 130.*1e9, 'KPrim':4.,
                         'alphaPrim': 130.*np.log(2.)/(360.-135.) ,
                         'alpha': 1.e-5/np.exp(-0.400485 *135./130.),   #1.e-5*np.exp(130.*np.log(2.)/(360.-135.)*135./130),#   1.e-5/np.exp( np.log(2)/(360.-135.)*135.),
