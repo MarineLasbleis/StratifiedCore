@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Time-stamp: "2015-12-03 16:58:29 marine"
+# Time-stamp: "2015-12-04 11:34:42 marine"
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -61,7 +61,7 @@ cbar = plt.colorbar(im, ax=ax)
 
 ax.axis([130., 450., 2000., 5000.])
 ax.set_xlabel("Pressure (GPa)")
-ax.set_xlabel("Temperature (K)")
+ax.set_ylabel("Temperature (K)")
 
 plt.savefig("map_conductivity.pdf")
 plt.show()
